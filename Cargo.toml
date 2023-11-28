@@ -5,6 +5,14 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+# NOTE: release profile is set up to optimize for size
+[profile.release]
+strip = true  # Automatically strip symbols from the binary.
+opt-level = "z"  # Optimize for size.
+# enable link time optimization, which makes the linker optimize at link stage
+# to potentially remove dead code and reduce binary size.
+lto=true
+
 [dependencies]
 # command line args processor
 # clap = { version = "4.0", features = ["derive"] }
