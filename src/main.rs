@@ -19,7 +19,7 @@ fn main() {
 
         match user_choice {
             1 => create_todo(&client).unwrap(),
-            2 => update_todo(get_number_from_user()),
+            2 => update_todo(get_number_from_user().try_into().unwrap()),
             // 3 => mark_done(0),
             // 4 => delete_todo(0),
             _ => (),

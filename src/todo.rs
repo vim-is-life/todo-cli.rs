@@ -28,29 +28,21 @@ pub fn get_all_todos(client: &Client) -> Result<Vec<TodoItem>, Box<dyn Error>> {
 
 /// TODO docs
 pub fn create_todo(client: &Client) -> Result<(), Box<dyn Error>> {
-    let mut name = String::new();
-    let mut desc = String::new();
-    let mut kind_wanted = String::new();
-
-    use std::io::stdin;
     println!("Todo name? (required)");
-    stdin().read_line(&mut name)?;
+    let name = get_user_input();
 
     println!("Description? (optional)");
-    stdin().read_line(&mut desc)?;
+    let desc = get_user_input();
 
     println!("Todo type? Options:");
     for todo_type in TodoKind::iter() {
         println!("\t{:2}. {todo_type}", todo_type as isize);
     }
-
-    stdin().read_line(&mut kind_wanted)?;
-    let todo_kind = kind_wanted.trim().parse().unwrap_or(-10);
-    let new_kind =
-        TodoKind::from_repr(todo_kind).unwrap_or(TodoKind::Uncategorized);
+    let kind = TodoKind::from_repr(get_number_from_user())
+        .unwrap_or(TodoKind::Uncategorized);
 
     let new_todo =
-        TodoItem::new(0, name.trim(), desc.trim(), new_kind, TodoState::Todo);
+        TodoItem::new(0, name.trim(), desc.trim(), kind, TodoState::Todo);
 
     client
         .post(format!("{SERVER_ADDR}/createTodo"))
@@ -81,7 +73,7 @@ pub fn delete_todo(todo_id: usize) {
 }
 
 /// TODO docs
-pub fn get_number_from_user() -> usize {
+pub fn get_number_from_user() -> isize {
     loop {
         let user_str = get_user_input();
         // match user_str.parse() {
