@@ -1,8 +1,0 @@
-
-src/defs.rs,80
-pub struct TodoItem 7,196
-pub enum TodoKind 16,387
-pub enum TodoState 25,533
-
-src/main.rs,14
-fn main(4,24
