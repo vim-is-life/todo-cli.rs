@@ -9,17 +9,21 @@ fn main() {
         display_todos(&client);
         display_prompt();
 
-        println!("Please enter your choice: ");
-        // let user_choice: isize =
-        //     get_user_input().parse().unwrap_or_else(|_err| {
-        //         println!("Couldn't parse input as integer, please try again.");
-        //         -1
-        //     });
-        let user_choice = get_number_from_user();
+        println!("\nPlease enter your choice: ");
+        let user_choice = get_number_from_user(false);
 
         match user_choice {
             1 => create_todo(&client).unwrap(),
-            2 => update_todo(get_number_from_user().try_into().unwrap()),
+            2..=4 => {
+                let affected_id =
+                    get_number_from_user(true).try_into().unwrap();
+                match user_choice {
+                    // 2 => update_todo(affected_id, &client).unwrap(),
+                    3 => mark_done(affected_id, &client).unwrap(),
+                    4 => delete_todo(affected_id, &client).unwrap(),
+                    _ => (),
+                }
+            }
             // 3 => mark_done(0),
             // 4 => delete_todo(0),
             _ => (),
