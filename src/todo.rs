@@ -38,7 +38,7 @@ pub fn create_todo(client: &Client) -> Result<(), Box<dyn Error>> {
     for todo_type in TodoKind::iter() {
         println!("\t{:2}. {todo_type}", todo_type as isize);
     }
-    let kind = TodoKind::from_repr(get_number_from_user())
+    let kind = TodoKind::from_repr(get_number_from_user(false))
         .unwrap_or(TodoKind::Uncategorized);
 
     let new_todo =
@@ -53,7 +53,7 @@ pub fn create_todo(client: &Client) -> Result<(), Box<dyn Error>> {
 }
 
 /// TODO docs
-pub fn update_todo(todo_id: usize) {
+pub fn update_todo(todo_id: usize, client: &Client) {
     todo!();
     // let mut wtr = csv::WriterBuilder::new()
     //     .has_headers(false)
@@ -63,17 +63,33 @@ pub fn update_todo(todo_id: usize) {
 }
 
 /// TODO docs
-pub fn mark_done(todo_id: usize) {
-    todo!()
+pub fn mark_done(
+    todo_id: usize,
+    client: &Client,
+) -> Result<(), Box<dyn Error>> {
+    client
+        .put(format!("{SERVER_ADDR}/markTodo/{todo_id}"))
+        .send()?;
+    Ok(())
 }
 
 /// TODO docs
-pub fn delete_todo(todo_id: usize) {
-    todo!()
+pub fn delete_todo(
+    todo_id: usize,
+    client: &Client,
+) -> Result<(), Box<dyn Error>> {
+    client
+        .delete(format!("{SERVER_ADDR}/deleteTodo/{todo_id}"))
+        .send()?;
+    Ok(())
 }
 
 /// TODO docs
-pub fn get_number_from_user() -> isize {
+pub fn get_number_from_user(caller_wants_id_prompt: bool) -> isize {
+    if caller_wants_id_prompt {
+        println!("\nPlease enter the ID of the item you'd like to change:");
+    }
+
     loop {
         let user_str = get_user_input();
         // match user_str.parse() {
